@@ -1,6 +1,5 @@
 package com.benitezryan.literalura.main;
 
-import com.benitezryan.literalura.model.DatosLibros;
 import com.benitezryan.literalura.service.ConsumoAPI;
 import com.benitezryan.literalura.service.ConvierteDatos;
 

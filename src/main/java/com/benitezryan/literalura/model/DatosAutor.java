@@ -1,4 +1,4 @@
 package com.benitezryan.literalura.model;
 
-public class DatosLibros {
+public record DatosAutor() {
 }
