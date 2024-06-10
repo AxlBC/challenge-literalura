@@ -20,7 +20,7 @@ public class ConsumoAPI {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        // retorna el contenido en formato json
+        // retorna el contenido en una string con formato json
         return response.body();
     }
 }

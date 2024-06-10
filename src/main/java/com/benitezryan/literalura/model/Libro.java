@@ -1,29 +1,45 @@
 package com.benitezryan.literalura.model;
 
+import jakarta.persistence.*;
+
 import java.util.List;
 
+@Entity
+@Table(name = "libros")
 public class Libro {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+
     private String titulo;
-    private String autor;
-    private List<String> temas;
-    private List<String> estanterias;
+    private List<String> idiomas;
     private boolean copyright;
     private Integer descargas;
+
+    @ManyToOne
+    private Autor autor;
 
     // Constructor vacio para el correcto funcionamiento de la base de datos
     public Libro() {}
 
-    // Constructor para asignar las valores a cada atributo
-    public Libro(DatosLibro datosLibro) {
+    // Constructor para asignar los valores a cada atributo
+    public Libro(DatosLibro datosLibro, DatosAutor datosAutor) {
         this.titulo = datosLibro.titulo();
-        this.autor = datosLibro.autor();
-        this.temas = datosLibro.temas();
-        this.estanterias = datosLibro.estanterias();
+        this.autor = new Autor(datosAutor);
+        this.idiomas = datosLibro.idiomas();
         this.copyright = datosLibro.copyright();
         this.descargas = datosLibro.descargas();
     }
 
     // Getters y Setters
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
     public String getTitulo() {
         return titulo;
     }
@@ -32,28 +48,20 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public String getAutor() {
+    public List<String> getIdiomas() {
+        return idiomas;
+    }
+
+    public void setIdiomas(List<String> idiomas) {
+        this.idiomas = idiomas;
+    }
+
+    public Autor getAutor() {
         return autor;
     }
 
-    public void setAutor(String autor) {
+    public void setAutor(Autor autor) {
         this.autor = autor;
-    }
-
-    public List<String> getTemas() {
-        return temas;
-    }
-
-    public void setTemas(List<String> temas) {
-        this.temas = temas;
-    }
-
-    public List<String> getEstanterias() {
-        return estanterias;
-    }
-
-    public void setEstanterias(List<String> estanterias) {
-        this.estanterias = estanterias;
     }
 
     public boolean isCopyright() {
@@ -73,16 +81,14 @@ public class Libro {
     }
 
     // Métodos
-
     @Override
     public String toString() {
-        return  "titulo='" + titulo + '\'' +
-                ", autor='" + autor + '\'' +
-                ", temas=" + temas +
-                ", estanterias=" + estanterias +
-                ", copyright=" + copyright +
-                ", descargas=" + descargas
-                ;
+        return String.format("""
+                -------------------------------------------
+                Título: %s
+                Autor: %s
+                Idiomas: %s
+                Copyright: %b
+                Descargas: %d""", this.titulo, this.autor.getNombre(), this.idiomas, this.copyright, this.descargas);
     }
 }
-

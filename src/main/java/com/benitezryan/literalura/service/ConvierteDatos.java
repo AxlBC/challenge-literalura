@@ -11,6 +11,7 @@ public class ConvierteDatos implements IConvierteDatos{
         try {
             return objectMapper.readValue(json, clase);
         } catch (JsonProcessingException e) {
+            System.out.println("Cayó en el error del convertidor");
             throw new RuntimeException(e);
         }
     }

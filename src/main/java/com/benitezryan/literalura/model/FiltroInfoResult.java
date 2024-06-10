@@ -1,8 +1,7 @@
-package com.benitezryan.literalura_challenge_test.model;
+package com.benitezryan.literalura.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
