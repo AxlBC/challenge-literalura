@@ -1,8 +1,8 @@
-package com.benitezryan.literalura;
+package com.benitezryan.literalura_challenge;
 
-import com.benitezryan.literalura.main.Main;
-import com.benitezryan.literalura.repository.IAutorRepository;
-import com.benitezryan.literalura.repository.ILibroRepository;
+import com.benitezryan.literalura_challenge.main.Main;
+import com.benitezryan.literalura_challenge.repository.IAutorRepository;
+import com.benitezryan.literalura_challenge.repository.ILibroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -33,7 +33,7 @@ public class LiteraluraChallengeTestApplication implements CommandLineRunner {
 /*
  * Pulimiento:
  * 1 - Agregar un enum para los idiomas
- * 2 - Generar detalles por defecto en caso de recibir ciertos parametros como null (hecho)
+ * 2 - Generar detalles por defecto en caso de recibir ciertos parametros como null
  * 3 - Modificar las relaciones para que acepte varios autores
  * 4 - Agregar extras
  */

@@ -1,4 +1,4 @@
-package com.benitezryan.literalura.model;
+package com.benitezryan.literalura_challenge.model;
 
 import jakarta.persistence.*;
 

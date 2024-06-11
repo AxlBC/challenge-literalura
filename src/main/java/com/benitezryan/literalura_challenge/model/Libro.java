@@ -1,4 +1,4 @@
-package com.benitezryan.literalura.model;
+package com.benitezryan.literalura_challenge.model;
 
 import jakarta.persistence.*;
 
@@ -12,7 +12,7 @@ public class Libro {
     private Long Id;
 
     private String titulo;
-    private List<String> idiomas;
+    private String idioma;
     private boolean copyright;
     private Integer descargas;
 
@@ -26,7 +26,8 @@ public class Libro {
     public Libro(DatosLibro datosLibro, DatosAutor datosAutor) {
         this.titulo = datosLibro.titulo();
         this.autor = new Autor(datosAutor);
-        this.idiomas = datosLibro.idiomas();
+//        this.idiomas = datosLibro.idiomas()
+        this.idioma = datosLibro.idiomas().get(0);
         this.copyright = datosLibro.copyright();
         this.descargas = datosLibro.descargas();
     }
@@ -48,12 +49,12 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public List<String> getIdiomas() {
-        return idiomas;
+    public String getIdioma() {
+        return idioma;
     }
 
-    public void setIdiomas(List<String> idiomas) {
-        this.idiomas = idiomas;
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
     }
 
     public Autor getAutor() {
@@ -87,8 +88,8 @@ public class Libro {
                 -------------------------------------------
                 Título: %s
                 Autor: %s
-                Idiomas: %s
+                Idioma: %s
                 Copyright: %b
-                Descargas: %d""", this.titulo, this.autor.getNombre(), this.idiomas, this.copyright, this.descargas);
+                Descargas: %d""", this.titulo, this.autor.getNombre(), this.idioma, this.copyright, this.descargas);
     }
 }

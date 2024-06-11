@@ -1,19 +1,20 @@
-package com.benitezryan.literalura.main;
+package com.benitezryan.literalura_challenge.main;
 
-import com.benitezryan.literalura.model.*;
-import com.benitezryan.literalura.repository.IAutorRepository;
-import com.benitezryan.literalura.repository.ILibroRepository;
-import com.benitezryan.literalura.service.ConsumoAPI;
-import com.benitezryan.literalura.service.ConvierteDatos;
+import com.benitezryan.literalura_challenge.model.*;
+import com.benitezryan.literalura_challenge.repository.IAutorRepository;
+import com.benitezryan.literalura_challenge.repository.ILibroRepository;
+import com.benitezryan.literalura_challenge.service.ConsumoAPI;
+import com.benitezryan.literalura_challenge.service.ConvierteDatos;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
     private final Scanner scanner = new Scanner(System.in);
     private final ConsumoAPI consumoApi = new ConsumoAPI();
-    private ConvierteDatos conversor = new ConvierteDatos();
+    private final ConvierteDatos conversor = new ConvierteDatos();
     //https://gutendex.com/books/?search=great
     private final String URL_BOOKS = "https://gutendex.com/books/?search=";
     private List<Libro> datosLibros = new ArrayList<>();
@@ -23,8 +24,8 @@ public class Main {
     private List<Libro> librosRegistradosEnLaBD = new ArrayList<>();
 
     // Creando el repositorio que estaremos utilizando
-    private IAutorRepository autorRepository;
-    private ILibroRepository libroRepository;
+    private final IAutorRepository autorRepository;
+    private final ILibroRepository libroRepository;
 
     public Main(IAutorRepository autorRepository, ILibroRepository libroRepository) {
         this.autorRepository = autorRepository;
@@ -33,48 +34,55 @@ public class Main {
 
     // Muestra el menú que verá el usuario
     public void mostrarMenu() {
-        var opcion = -1;
-        while (opcion != 0) {
-            var menu = """
+        try {
+            var opcion = -1;
+            while (opcion != 0) {
+                var menu = """
                     
                     1 - Buscar libro por título
                     2 - Listar libros registrados
                     3 - Listar autores registrados
                     4 - Listar autores vivos en un determinado año
                     5 - Listar libros por idiomas
-                    
+                    6 - Estadisticas de descargas
+                    7 - Top 10 libros más descargados
                     0 - Salir""";
-            System.out.println(menu);
-            opcion = scanner.nextInt();
-            scanner.nextLine();
+                System.out.println(menu);
+                opcion = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (opcion) {
-                case 1:
-                    buscarLibroPorTitulo();
-                    break;
-                case 2:
-                    obtenerLibrosRegistrados();
-                    break;
-                case 3:
-                    obtenerAutoresRegistrados();
-                    break;
-                case 4:
-                    autoresVivosEnXAnio();
-                    break;
-                case 5:
-                    listarLibrosPorIdiomas();
-                    break;
-                case 0:
-                    System.out.println("Cerrando la aplicación.");
-                    break;
-                default:
-                    System.out.println("Opción invalida, pruebe denuevo.");
-                    break;
-                case -5:
-                    System.out.println("Teste del proyecto");
-                    getDatosLibros();
-                    break;
+                switch (opcion) {
+                    case 1:
+                        buscarLibroPorTitulo();
+                        break;
+                    case 2:
+                        obtenerLibrosRegistrados();
+                        break;
+                    case 3:
+                        obtenerAutoresRegistrados();
+                        break;
+                    case 4:
+                        autoresVivosEnXAnio();
+                        break;
+                    case 5:
+                        listarLibrosPorIdiomas();
+                        break;
+                    case 6:
+                        generarEstadisticas();
+                        break;
+                    case 7:
+                        top10LibrosMasDescargados();
+                        break;
+                    case 0:
+                        System.out.println("Cerrando la aplicación.");
+                        break;
+                    default:
+                        System.out.println("Opción invalida, pruebe de nuevo.");
+                        break;
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Error: Opción no válida\n" + e);
         }
     }
 
@@ -127,13 +135,61 @@ public class Main {
 
     // Lista los libros por el primer idioma en la lista de idiomas
     private void listarLibrosPorIdiomas() {
-        datosLibros = libroRepository.findAll();
-        datosLibros.stream()
-                .sorted(Comparator.comparing(l -> l.getIdiomas().get(0)))
-                .forEach(l -> System.out.println(l.getIdiomas().get(0) + " - " + l.getTitulo()));
-        System.out.println("----------------------------------------------------------------\n");
+        try {
+            List<String> idiomas = new ArrayList<>();
+            idiomas.add("es");
+            idiomas.add("en");
+            idiomas.add("fr");
+            idiomas.add("pt");
+            System.out.println("""
+                Elija un idioma para listar los libros:
+                es - Español
+                en - Inglés
+                fr - Francés
+                pt - Portugués
+                """);
+            String opcion = scanner.nextLine();
+
+            if (idiomas.contains(opcion.toLowerCase())) {
+                datosLibros = libroRepository.findAll();
+                datosLibros.stream()
+                        .filter(l -> l.getIdioma().equalsIgnoreCase(opcion))
+                        .sorted(Comparator.comparing(Libro::getTitulo))
+                        .forEach(l -> System.out.println("----------------------------------------------------------------\n"
+                                + "Libro: " + l.getTitulo() + "\nIdioma: " + l.getIdioma() +
+                                "\n----------------------------------------------------------------\n"));
+            } else {
+                System.out.println("Por favor, seleccione uno de los idiomas disponibles");
+                listarLibrosPorIdiomas();
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
+    // Estadisticas del número de descargas totales y correspondientes a cada libro
+    private void generarEstadisticas() {
+        librosRegistradosEnLaBD = libroRepository.findAll();
+
+        DoubleSummaryStatistics est = librosRegistradosEnLaBD.stream()
+                .filter(l -> l.getDescargas() > 0.0)
+                .collect(Collectors.summarizingDouble(Libro::getDescargas));
+
+        System.out.println("Número de libros registrados: " + est.getCount());
+        System.out.println("Suma de descargas totales registradas: " + est.getSum());
+        System.out.println("Máximo número de descargas de un libro: " + est.getMax());
+        System.out.println("Mínimo número de descargas de un libro: " + est.getMin());
+        System.out.println("Promedio de descargas: " + est.getAverage());
+    }
+
+    // Muestra cúales son los 10 libros con el mayor número de descargas imprimiendolos de mayor a menos
+    private void top10LibrosMasDescargados() {
+        List<Libro> libros = libroRepository.findTop10ByOrderByDescargasDesc();
+
+        System.out.println("Los 10 libros más descargados del momento son: ");
+        libros.forEach(l -> System.out.println("Libro: " + l.getTitulo() + " - " +
+                "Descargas: " + l.getDescargas()));
+    }
 
     // Métodos auxiliares
     private Libro getDatosLibros() {
@@ -193,18 +249,18 @@ public class Main {
     // Pregunta al usuario cuál de todos los libros obtenidos es el que está buscando
     private Libro seleccionarDeLaListaDeLibrosObtenida(List<Libro> lista) {
         try {
+            System.out.println("Lista de resultados de la busqueda: ");
             for (int i = 0; i < lista.size(); i++) {
                 System.out.println((i + 1) + " - " + lista.get(i).getTitulo());
+            }
+            System.out.println("\nSeleccione el indice del libro buscado.");
+            var opcion = scanner.nextInt();
+            scanner.nextLine();
 
-                System.out.println("\nSeleccione el indice del libro buscado.");
-                var opcion = scanner.nextInt();
-                scanner.nextLine();
-
-                if (opcion >= 1 && opcion <= lista.size()) {
-                    return lista.get(opcion - 1);
-                } else {
-                    System.out.println("Error: No hay ningun elemento en ese indice");
-                }
+            if (opcion >= 1 && opcion <= lista.size()) {
+                return lista.get(opcion - 1);
+            } else {
+                System.out.println("Error: No hay ningun elemento en ese indice");
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

@@ -1,6 +1,6 @@
-package com.benitezryan.literalura.repository;
+package com.benitezryan.literalura_challenge.repository;
 
-import com.benitezryan.literalura.model.Autor;
+import com.benitezryan.literalura_challenge.model.Autor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

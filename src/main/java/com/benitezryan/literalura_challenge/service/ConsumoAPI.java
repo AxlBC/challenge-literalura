@@ -1,4 +1,4 @@
-package com.benitezryan.literalura.service;
+package com.benitezryan.literalura_challenge.service;
 
 import java.io.IOException;
 import java.net.URI;
