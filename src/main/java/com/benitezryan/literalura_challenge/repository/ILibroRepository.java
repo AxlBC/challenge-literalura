@@ -1,6 +1,6 @@
 package com.benitezryan.literalura_challenge.repository;
 
-import com.benitezryan.literalura_challenge.model.Libro;
+import com.benitezryan.literalura_challenge.model.libro.Libro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

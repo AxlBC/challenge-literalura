@@ -1,6 +1,10 @@
 package com.benitezryan.literalura_challenge.main;
 
 import com.benitezryan.literalura_challenge.model.*;
+import com.benitezryan.literalura_challenge.model.autor.Autor;
+import com.benitezryan.literalura_challenge.model.autor.DatosAutor;
+import com.benitezryan.literalura_challenge.model.libro.DatosLibro;
+import com.benitezryan.literalura_challenge.model.libro.Libro;
 import com.benitezryan.literalura_challenge.repository.IAutorRepository;
 import com.benitezryan.literalura_challenge.repository.ILibroRepository;
 import com.benitezryan.literalura_challenge.service.ConsumoAPI;
@@ -12,10 +16,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
+    /* Strings a usar
+     * https://gutendex.com/books/?search=great
+     */
+
+    // Variables globales
     private final Scanner scanner = new Scanner(System.in);
     private final ConsumoAPI consumoApi = new ConsumoAPI();
     private final ConvierteDatos conversor = new ConvierteDatos();
-    //https://gutendex.com/books/?search=great
     private final String URL_BOOKS = "https://gutendex.com/books/?search=";
     private List<Libro> datosLibros = new ArrayList<>();
     private List<Autor> datosAutores = new ArrayList<>();
@@ -23,7 +31,7 @@ public class Main {
     private List<Autor> autoresRegistradosEnLaBD = new ArrayList<>();
     private List<Libro> librosRegistradosEnLaBD = new ArrayList<>();
 
-    // Creando el repositorio que estaremos utilizando
+    // Repositorios
     private final IAutorRepository autorRepository;
     private final ILibroRepository libroRepository;
 
@@ -126,7 +134,7 @@ public class Main {
         scanner.nextLine();
 
         System.out.println("----------------------------------------------------------------\n" +
-                "Los autores vivos en el año son:" + anio);
+                "Los autores vivos en el año " + anio + " son:");
         autorRepository.autorVivoEnXAnio(anio).stream()
                 .sorted(Comparator.comparing(Autor::getNombre))
                 .forEach(a -> System.out.println(a.getNombre()));
@@ -203,7 +211,7 @@ public class Main {
             // Se extrae solo la información de la sección "results" del json
             FiltroInfoResult filtroInfoResult = conversor.obtenerDatos(json, FiltroInfoResult.class);
 
-            // Se procesan los resultados de la busqueda y en caso de ser nulos retorna null
+            // Se procesan los resultados de la búsqueda y en caso de ser nulos retorna null
             if (filtroInfoResult.resultado().isEmpty()) {
                 return null;
             } else {

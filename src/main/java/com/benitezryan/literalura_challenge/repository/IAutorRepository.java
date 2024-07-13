@@ -1,6 +1,6 @@
 package com.benitezryan.literalura_challenge.repository;
 
-import com.benitezryan.literalura_challenge.model.Autor;
+import com.benitezryan.literalura_challenge.model.autor.Autor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface IAutorRepository extends JpaRepository<Autor, Long> {
 
-    @Query("SELECT a FROM Autor a WHERE a.anioNacimiento <= :anio AND (a.anioFallecimiento IS NULL OR " +
+    @Query("SELECT a FROM Autor a " +
+            "WHERE a.anioNacimiento <= :anio AND (a.anioFallecimiento IS NULL OR " +
             "a.anioFallecimiento >= :anio)")
     List<Autor> autorVivoEnXAnio(int anio);
 

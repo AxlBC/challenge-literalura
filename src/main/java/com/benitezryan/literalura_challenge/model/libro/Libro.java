@@ -1,8 +1,8 @@
-package com.benitezryan.literalura_challenge.model;
+package com.benitezryan.literalura_challenge.model.libro;
 
+import com.benitezryan.literalura_challenge.model.autor.Autor;
+import com.benitezryan.literalura_challenge.model.autor.DatosAutor;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "libros")
