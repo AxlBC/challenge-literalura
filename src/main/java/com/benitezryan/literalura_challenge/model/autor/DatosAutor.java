@@ -1,4 +1,4 @@
-package com.benitezryan.literalura_challenge.model;
+package com.benitezryan.literalura_challenge.model.autor;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

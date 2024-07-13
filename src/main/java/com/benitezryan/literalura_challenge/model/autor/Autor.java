@@ -1,5 +1,6 @@
-package com.benitezryan.literalura_challenge.model;
+package com.benitezryan.literalura_challenge.model.autor;
 
+import com.benitezryan.literalura_challenge.model.libro.Libro;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 public class Autor {
     /*
      * 3 - Todos nuestros autores tendrán un identificador único (Id)
-     * 4 - El Id será generado automáticamente
+     * 4 - El ID será generado automáticamente
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
