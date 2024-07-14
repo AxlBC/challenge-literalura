@@ -50,7 +50,5 @@ Este proyecto consiste en la creación de un catálogo de libros, lo cual es pos
 ![opcion7(top10MasDescargados)](https://github.com/user-attachments/assets/09396a88-28ff-4d87-9b92-57586541596d)
 - Por último, también permite mostrar un top 10 de los libros más descargados de los registrados en la base de datos.
 
-
-
-
-
+## Estado del proyecto
+Finalmente, se podría decir que este proyecto se encuentra finalizado, dando así paso a la creación de futuros proyectos en los que aplicar todos los conocimientos adquiridos hasta este punto, y, más conocimientos que se irán adquiriendo en el camino, haciendo así que los proyectos que están por venir tengan un mayor nivel.
