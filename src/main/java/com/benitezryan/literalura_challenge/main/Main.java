@@ -187,7 +187,7 @@ public class Main {
         System.out.println("Suma de descargas totales registradas: " + est.getSum());
         System.out.println("Máximo número de descargas de un libro: " + est.getMax());
         System.out.println("Mínimo número de descargas de un libro: " + est.getMin());
-        System.out.println("Promedio de descargas: " + est.getAverage());
+        System.out.printf("Promedio de descargas: %.2f%n", est.getAverage());
     }
 
     // Muestra cúales son los 10 libros con el mayor número de descargas imprimiendolos de mayor a menos
